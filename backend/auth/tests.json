@@ -1,0 +1,58 @@
+{
+  "tests": [
+    {
+      "name": "Test registration with valid data",
+      "method": "POST",
+      "body": {
+        "action": "register",
+        "username": "testplayer123",
+        "email": "testplayer123@example.com",
+        "password": "password123",
+        "role": "player",
+        "fullName": "Test Player"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "user": {
+          "username": "string",
+          "email": "string",
+          "role": "string"
+        }
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test login with valid credentials",
+      "method": "POST",
+      "body": {
+        "action": "login",
+        "username": "testplayer123",
+        "password": "password123"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "user": {
+          "username": "string",
+          "role": "string"
+        }
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test login with invalid password",
+      "method": "POST",
+      "body": {
+        "action": "login",
+        "username": "testplayer123",
+        "password": "wrongpassword"
+      },
+      "expectedStatus": 401,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

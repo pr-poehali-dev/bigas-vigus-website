@@ -13,7 +13,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!username || !password) {
@@ -25,15 +25,50 @@ const Login = () => {
       return;
     }
 
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('userName', username);
+    try {
+      const response = await fetch('https://functions.poehali.dev/083e3d05-b278-49cb-b29d-98e3e203352a', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'login',
+          username: username,
+          password: password,
+        }),
+      });
 
-    toast({
-      title: 'Успешный вход',
-      description: `Добро пожаловать, ${username}!`,
-    });
+      const data = await response.json();
 
-    navigate('/dashboard');
+      if (!response.ok) {
+        toast({
+          title: 'Ошибка входа',
+          description: data.error || 'Неверное имя пользователя или пароль',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userName', data.user.username);
+      localStorage.setItem('userRole', data.user.role);
+      localStorage.setItem('userEmail', data.user.email);
+      localStorage.setItem('userAvatar', data.user.avatar_emoji);
+      localStorage.setItem('userId', data.user.id);
+
+      toast({
+        title: 'Успешный вход',
+        description: `Добро пожаловать, ${data.user.username}!`,
+      });
+
+      navigate('/dashboard');
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: 'Проблема с подключением к серверу',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (

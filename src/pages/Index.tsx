@@ -129,7 +129,7 @@ const Index = () => {
             <div className="flex items-center gap-3">
               <div className="text-3xl font-montserrat font-black text-glow">
                 <span className="text-neon-purple">BIGAS</span>{' '}
-                <span className="text-neon-magenta">VIGUS</span>
+                <span className="text-neon-magenta">VIRUS</span>
               </div>
             </div>
 
@@ -170,7 +170,7 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-neon-purple/20 via-neon-magenta/20 to-neon-cyan/20" />
               <div className="relative z-10 text-center space-y-6">
                 <h1 className="text-7xl font-montserrat font-black text-glow animate-slide-up">
-                  BIGAS VIGUS
+                  BIGAS VIRUS
                 </h1>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                   Профессиональная киберспортивная команда
@@ -540,7 +540,7 @@ const Index = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-2xl font-montserrat font-black text-glow">
               <span className="text-neon-purple">BIGAS</span>{' '}
-              <span className="text-neon-magenta">VIGUS</span>
+              <span className="text-neon-magenta">VIRUS</span>
             </div>
             <div className="flex gap-4">
               {['Twitter', 'Youtube', 'Twitch', 'Instagram'].map((social) => (
@@ -551,7 +551,7 @@ const Index = () => {
             </div>
           </div>
           <div className="text-center mt-6 text-sm text-muted-foreground">
-            © 2026 Bigas Vigus. Все права защищены.
+            © 2026 Bigas Virus. Все права защищены.
           </div>
         </div>
       </footer>

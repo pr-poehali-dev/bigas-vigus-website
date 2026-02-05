@@ -55,7 +55,7 @@ const Login = () => {
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
             <img 
-              src="https://cdn.poehali.dev/files/e2d1b8a3-4026-4b04-86c5-3b0044c46102.jpg" 
+              src="https://cdn.poehali.dev/files/f3999ec9-08a0-469a-9f6f-1ae9e3db1a24.png" 
               alt="BIGAS VIRUS Logo"
               className="w-32 h-32 object-contain"
             />

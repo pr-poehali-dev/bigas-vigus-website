@@ -182,7 +182,7 @@ const Index = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img 
-                src="https://cdn.poehali.dev/files/e2d1b8a3-4026-4b04-86c5-3b0044c46102.jpg" 
+                src="https://cdn.poehali.dev/files/f3999ec9-08a0-469a-9f6f-1ae9e3db1a24.png" 
                 alt="BIGAS VIRUS Logo"
                 className="w-12 h-12 object-contain"
               />
@@ -233,7 +233,7 @@ const Index = () => {
               <div className="relative z-10 text-center space-y-6">
                 <div className="flex justify-center mb-6">
                   <img 
-                    src="https://cdn.poehali.dev/files/e2d1b8a3-4026-4b04-86c5-3b0044c46102.jpg" 
+                    src="https://cdn.poehali.dev/files/f3999ec9-08a0-469a-9f6f-1ae9e3db1a24.png" 
                     alt="BIGAS VIRUS Logo"
                     className="w-48 h-48 object-contain animate-slide-up"
                   />

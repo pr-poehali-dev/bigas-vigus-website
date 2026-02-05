@@ -181,6 +181,11 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
+              <img 
+                src="https://cdn.poehali.dev/files/e2d1b8a3-4026-4b04-86c5-3b0044c46102.jpg" 
+                alt="BIGAS VIRUS Logo"
+                className="w-12 h-12 object-contain"
+              />
               <div className="text-3xl font-montserrat font-black text-glow">
                 <span className="text-neon-purple">BIGAS</span>{' '}
                 <span className="text-neon-magenta">VIRUS</span>
@@ -226,6 +231,13 @@ const Index = () => {
             <section className="relative py-20 rounded-2xl overflow-hidden neon-border">
               <div className="absolute inset-0 bg-gradient-to-r from-neon-purple/20 via-neon-magenta/20 to-neon-cyan/20" />
               <div className="relative z-10 text-center space-y-6">
+                <div className="flex justify-center mb-6">
+                  <img 
+                    src="https://cdn.poehali.dev/files/e2d1b8a3-4026-4b04-86c5-3b0044c46102.jpg" 
+                    alt="BIGAS VIRUS Logo"
+                    className="w-48 h-48 object-contain animate-slide-up"
+                  />
+                </div>
                 <h1 className="text-7xl font-montserrat font-black text-glow animate-slide-up">
                   BIGAS VIRUS
                 </h1>

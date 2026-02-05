@@ -129,6 +129,13 @@ const Register = () => {
 
       <div className="relative z-10 w-full max-w-4xl px-4 animate-fade-in">
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <img 
+              src="https://cdn.poehali.dev/files/e2d1b8a3-4026-4b04-86c5-3b0044c46102.jpg" 
+              alt="BIGAS VIRUS Logo"
+              className="w-32 h-32 object-contain"
+            />
+          </div>
           <div className="text-5xl font-montserrat font-black text-glow mb-4">
             <span className="text-neon-purple">BIGAS</span>{' '}
             <span className="text-neon-magenta">VIRUS</span>

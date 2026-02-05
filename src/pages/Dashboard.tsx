@@ -35,6 +35,11 @@ const Dashboard = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
+              <img 
+                src="https://cdn.poehali.dev/files/e2d1b8a3-4026-4b04-86c5-3b0044c46102.jpg" 
+                alt="BIGAS VIRUS Logo"
+                className="w-12 h-12 object-contain"
+              />
               <div className="text-3xl font-montserrat font-black text-glow">
                 <span className="text-neon-purple">BIGAS</span>{' '}
                 <span className="text-neon-magenta">VIRUS</span>

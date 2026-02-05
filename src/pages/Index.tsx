@@ -49,6 +49,7 @@ const teamMembers = [
     adr: 85.3,
     rating: 1.28,
     photo: '🎯',
+    photoUrl: null as string | null,
   },
   {
     id: 2,
@@ -58,6 +59,7 @@ const teamMembers = [
     adr: 88.1,
     rating: 1.25,
     photo: '⚡',
+    photoUrl: null as string | null,
   },
   {
     id: 3,
@@ -67,6 +69,7 @@ const teamMembers = [
     adr: 76.4,
     rating: 1.18,
     photo: '🧠',
+    photoUrl: null as string | null,
   },
   {
     id: 4,
@@ -76,6 +79,7 @@ const teamMembers = [
     adr: 82.7,
     rating: 1.22,
     photo: '🔥',
+    photoUrl: null as string | null,
   },
   {
     id: 5,
@@ -85,6 +89,7 @@ const teamMembers = [
     adr: 73.2,
     rating: 1.15,
     photo: '🛡️',
+    photoUrl: null as string | null,
   },
 ];
 
@@ -118,6 +123,8 @@ const news = [
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
+  const [team, setTeam] = useState(teamMembers);
+  const [uploadingId, setUploadingId] = useState<number | null>(null);
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -259,38 +266,94 @@ const Index = () => {
         {activeSection === 'team' && (
           <div className="space-y-12 animate-fade-in">
             <section>
-              <h1 className="text-5xl font-montserrat font-black text-glow mb-4">Состав команды</h1>
+              <h1 className="text-5xl font-montserrat font-black text-glow mb-4">Наши бойцы</h1>
               <p className="text-xl text-muted-foreground mb-12">
-                Профессионалы с опытом международных турниров
+                Элитный состав профессионалов с опытом международных турниров. 
+                Каждый член команды — мастер своего дела, готовый к любым вызовам на киберспортивной арене.
               </p>
 
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {teamMembers.map((member) => (
-                  <Card key={member.id} className="p-6 bg-card neon-border hover:scale-105 transition-transform">
-                    <div className="text-center mb-4">
-                      <div className="text-6xl mb-4">{member.photo}</div>
-                      <h3 className="text-2xl font-montserrat font-bold text-glow mb-1">
-                        {member.name}
-                      </h3>
-                      <Badge className="bg-neon-magenta">{member.role}</Badge>
-                    </div>
+                {team.map((member) => {
+                  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
 
-                    <div className="space-y-3 mt-6">
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">K/D Ratio</span>
-                        <span className="font-bold text-neon-cyan">{member.kd}</span>
+                    if (file.type !== 'image/png') {
+                      alert('Пожалуйста, загрузите изображение в формате PNG');
+                      return;
+                    }
+
+                    setUploadingId(member.id);
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                      const imageUrl = event.target?.result as string;
+                      setTeam(prevTeam =>
+                        prevTeam.map(m =>
+                          m.id === member.id ? { ...m, photoUrl: imageUrl } : m
+                        )
+                      );
+                      setUploadingId(null);
+                    };
+                    reader.readAsDataURL(file);
+                  };
+
+                  return (
+                    <Card key={member.id} className="p-6 bg-card neon-border hover:scale-105 transition-transform">
+                      <div className="text-center mb-4">
+                        <div className="relative mx-auto w-32 h-32 mb-4 group">
+                          <input
+                            type="file"
+                            accept="image/png"
+                            id={`upload-${member.id}`}
+                            className="hidden"
+                            onChange={handlePhotoUpload}
+                          />
+                          <label
+                            htmlFor={`upload-${member.id}`}
+                            className="block w-full h-full cursor-pointer rounded-lg overflow-hidden bg-gradient-to-br from-neon-purple/20 to-neon-magenta/20 border-2 border-neon-cyan/30 hover:border-neon-cyan transition-all"
+                          >
+                            {member.photoUrl ? (
+                              <img
+                                src={member.photoUrl}
+                                alt={member.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex flex-col items-center justify-center">
+                                <div className="text-5xl mb-2">{member.photo}</div>
+                                <Icon name="Upload" size={20} className="text-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity" />
+                              </div>
+                            )}
+                          </label>
+                          {uploadingId === member.id && (
+                            <div className="absolute inset-0 bg-background/80 flex items-center justify-center rounded-lg">
+                              <Icon name="Loader2" size={32} className="animate-spin text-neon-cyan" />
+                            </div>
+                          )}
+                        </div>
+                        <h3 className="text-2xl font-montserrat font-bold text-glow mb-1">
+                          {member.name}
+                        </h3>
+                        <Badge className="bg-neon-magenta">{member.role}</Badge>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">ADR</span>
-                        <span className="font-bold text-neon-purple">{member.adr}</span>
+
+                      <div className="space-y-3 mt-6">
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">K/D Ratio</span>
+                          <span className="font-bold text-neon-cyan">{member.kd}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">ADR</span>
+                          <span className="font-bold text-neon-purple">{member.adr}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">Rating 2.0</span>
+                          <span className="font-bold text-neon-magenta">{member.rating}</span>
+                        </div>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Rating 2.0</span>
-                        <span className="font-bold text-neon-magenta">{member.rating}</span>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
+                    </Card>
+                  );
+                })}
               </div>
             </section>
           </div>

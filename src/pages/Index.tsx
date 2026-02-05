@@ -155,7 +155,10 @@ const Index = () => {
               ))}
             </div>
 
-            <Button className="bg-neon-magenta hover:bg-neon-magenta/80 animate-glow">
+            <Button 
+              className="bg-neon-magenta hover:bg-neon-magenta/80 animate-glow"
+              onClick={() => window.location.href = '/login'}
+            >
               <Icon name="LogIn" className="mr-2" size={18} />
               Войти
             </Button>

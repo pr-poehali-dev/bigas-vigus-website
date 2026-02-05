@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
+import { useToast } from '@/hooks/use-toast';
 import {
   LineChart,
   Line,
@@ -121,10 +122,56 @@ const news = [
   },
 ];
 
+interface VKPost {
+  id: number;
+  title: string;
+  text: string;
+  date: string;
+  url: string;
+  likes: number;
+  views: number;
+  image: string | null;
+}
+
 const Index = () => {
+  const { toast } = useToast();
   const [activeSection, setActiveSection] = useState('home');
   const [team, setTeam] = useState(teamMembers);
   const [uploadingId, setUploadingId] = useState<number | null>(null);
+  const [vkNews, setVkNews] = useState<VKPost[]>([]);
+  const [loadingNews, setLoadingNews] = useState(false);
+
+  useEffect(() => {
+    if (activeSection === 'news') {
+      loadVKNews();
+    }
+  }, [activeSection]);
+
+  const loadVKNews = async () => {
+    setLoadingNews(true);
+    try {
+      const response = await fetch('https://functions.poehali.dev/597eb07c-45b8-4b8d-8e45-1eda4c03f535?count=6');
+      const data = await response.json();
+      
+      if (data.error) {
+        toast({
+          title: 'Ошибка загрузки',
+          description: 'Не удалось загрузить новости из VK',
+          variant: 'destructive',
+        });
+      } else {
+        setVkNews(data.posts || []);
+      }
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: 'Проблема с подключением к VK API',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoadingNews(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -565,37 +612,106 @@ const Index = () => {
         {activeSection === 'news' && (
           <div className="space-y-12 animate-fade-in">
             <section>
-              <h1 className="text-5xl font-montserrat font-black text-glow mb-4">Новости</h1>
+              <div className="flex items-center justify-between mb-4">
+                <h1 className="text-5xl font-montserrat font-black text-glow">Новости</h1>
+                <Button 
+                  onClick={loadVKNews}
+                  disabled={loadingNews}
+                  variant="outline"
+                  className="neon-border"
+                >
+                  {loadingNews ? (
+                    <>
+                      <Icon name="Loader2" className="mr-2 animate-spin" size={18} />
+                      Загрузка...
+                    </>
+                  ) : (
+                    <>
+                      <Icon name="RefreshCw" className="mr-2" size={18} />
+                      Обновить
+                    </>
+                  )}
+                </Button>
+              </div>
               <p className="text-xl text-muted-foreground mb-12">
-                Последние события и анонсы команды
+                Последние события и анонсы команды из группы VK
               </p>
 
-              <div className="space-y-6">
-                {[1, 2, 3, 4].map((article) => (
-                  <Card key={article} className="p-8 bg-card neon-border hover:scale-102 transition-transform cursor-pointer">
-                    <div className="flex gap-6">
-                      <div className="w-48 h-32 bg-gradient-to-br from-neon-purple to-neon-magenta rounded-lg flex items-center justify-center shrink-0">
-                        <Icon name="Newspaper" size={48} className="text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <Badge className="mb-3 bg-neon-cyan">Турниры</Badge>
-                        <h3 className="text-2xl font-montserrat font-bold mb-2">
-                          Bigas Vigus выходят в полуфинал Major Championship
-                        </h3>
-                        <p className="text-muted-foreground mb-4">
-                          Команда продемонстрировала выдающуюся игру в четвертьфинале,
-                          победив действующих чемпионов со счётом 2:0...
-                        </p>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <span>15 января 2026</span>
-                          <span>•</span>
-                          <span>5 мин чтения</span>
+              {loadingNews ? (
+                <div className="flex items-center justify-center py-20">
+                  <Icon name="Loader2" className="animate-spin text-neon-cyan" size={48} />
+                </div>
+              ) : vkNews.length === 0 ? (
+                <Card className="p-12 bg-card neon-border text-center">
+                  <Icon name="Newspaper" size={64} className="mx-auto mb-4 text-neon-purple opacity-50" />
+                  <h3 className="text-xl font-montserrat font-bold mb-2">
+                    Новости пока не загружены
+                  </h3>
+                  <p className="text-muted-foreground mb-6">
+                    Добавьте токен VK API для загрузки новостей из группы
+                  </p>
+                  <Button onClick={loadVKNews} className="animate-glow">
+                    <Icon name="Download" className="mr-2" size={18} />
+                    Загрузить новости
+                  </Button>
+                </Card>
+              ) : (
+                <div className="space-y-6">
+                  {vkNews.map((post) => (
+                    <Card 
+                      key={post.id} 
+                      className="p-8 bg-card neon-border hover:scale-102 transition-transform cursor-pointer"
+                      onClick={() => window.open(post.url, '_blank')}
+                    >
+                      <div className="flex gap-6">
+                        <div className="w-48 h-32 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
+                          {post.image ? (
+                            <img 
+                              src={post.image} 
+                              alt={post.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-neon-purple to-neon-magenta flex items-center justify-center">
+                              <Icon name="Newspaper" size={48} className="text-white" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <Badge className="mb-3 bg-neon-cyan">VK</Badge>
+                          <h3 className="text-2xl font-montserrat font-bold mb-2">
+                            {post.title}
+                          </h3>
+                          <p className="text-muted-foreground mb-4 line-clamp-2">
+                            {post.text}
+                          </p>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <span>{post.date}</span>
+                            {post.views > 0 && (
+                              <>
+                                <span>•</span>
+                                <div className="flex items-center gap-1">
+                                  <Icon name="Eye" size={14} />
+                                  <span>{post.views}</span>
+                                </div>
+                              </>
+                            )}
+                            {post.likes > 0 && (
+                              <>
+                                <span>•</span>
+                                <div className="flex items-center gap-1">
+                                  <Icon name="Heart" size={14} />
+                                  <span>{post.likes}</span>
+                                </div>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </section>
           </div>
         )}

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS team_members (
 
 -- Вставка 5 игроков команды
 INSERT INTO team_members (name, role, kd_ratio, adr, rating, photo_emoji) VALUES
-    ('SHADOW', 'AWPer', 1.52, 85.3, 1.28, '🎯'),
+    ('Glaser', 'AWPer', 1.52, 85.3, 1.28, '🎯'),
     ('PHANTOM', 'Entry Fragger', 1.48, 88.1, 1.25, '⚡'),
     ('CIPHER', 'IGL', 1.35, 76.4, 1.18, '🧠'),
     ('VORTEX', 'Rifler', 1.42, 82.7, 1.22, '🔥'),

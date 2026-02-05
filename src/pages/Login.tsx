@@ -104,12 +104,7 @@ const Login = () => {
               <button
                 type="button"
                 className="text-neon-cyan hover:underline font-medium"
-                onClick={() => {
-                  toast({
-                    title: 'Регистрация',
-                    description: 'Функция в разработке',
-                  });
-                }}
+                onClick={() => navigate('/register')}
               >
                 Зарегистрироваться
               </button>

@@ -8,10 +8,22 @@ import { useNavigate } from 'react-router-dom';
 const Dashboard = () => {
   const navigate = useNavigate();
   const userName = localStorage.getItem('userName') || 'Игрок';
+  const userRole = localStorage.getItem('userRole') || 'fan';
+  const userAvatar = localStorage.getItem('userAvatar') || '👤';
+
+  const roleLabels: Record<string, string> = {
+    player: 'Игрок команды',
+    manager: 'Менеджер команды',
+    smm: 'СММ-специалист',
+    fan: 'Фанат команды',
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('userName');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userAvatar');
     navigate('/');
   };
 
@@ -74,14 +86,14 @@ const Dashboard = () => {
               <Card className="p-8 neon-border bg-card">
                 <div className="flex items-start gap-6">
                   <div className="w-24 h-24 rounded-full bg-gradient-to-br from-neon-purple to-neon-magenta flex items-center justify-center text-5xl">
-                    🎮
+                    {userAvatar}
                   </div>
                   <div className="flex-1 space-y-4">
                     <div>
                       <h2 className="text-2xl font-montserrat font-bold text-glow mb-2">
                         {userName}
                       </h2>
-                      <p className="text-muted-foreground">Участник команды BIGAS VIRUS</p>
+                      <p className="text-muted-foreground">{roleLabels[userRole]}</p>
                     </div>
                     <div className="grid grid-cols-3 gap-4">
                       <div className="p-4 rounded-lg bg-background/50 neon-border">

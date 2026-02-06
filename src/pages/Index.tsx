@@ -44,13 +44,14 @@ const radarData = [
 const teamMembers = [
   {
     id: 1,
-    name: 'SHADOW',
+    name: 'N11ck_',
     role: 'AWPer',
-    kd: 1.52,
-    adr: 85.3,
+    kd: 1.1,
+    adr: 90,
     rating: 1.28,
+    elo: 1488,
     photo: '🎯',
-    photoUrl: null as string | null,
+    photoUrl: 'https://cdn.poehali.dev/files/11c01ba0-db04-4751-afa7-e8b39cf6cf2d.jpg',
   },
   {
     id: 2,
@@ -59,6 +60,7 @@ const teamMembers = [
     kd: 1.48,
     adr: 88.1,
     rating: 1.25,
+    elo: 1488,
     photo: '⚡',
     photoUrl: null as string | null,
   },
@@ -69,6 +71,7 @@ const teamMembers = [
     kd: 1.35,
     adr: 76.4,
     rating: 1.18,
+    elo: 1488,
     photo: '🧠',
     photoUrl: null as string | null,
   },
@@ -79,6 +82,7 @@ const teamMembers = [
     kd: 1.42,
     adr: 82.7,
     rating: 1.22,
+    elo: 1488,
     photo: '🔥',
     photoUrl: null as string | null,
   },
@@ -89,6 +93,7 @@ const teamMembers = [
     kd: 1.28,
     adr: 73.2,
     rating: 1.15,
+    elo: 1488,
     photo: '🛡️',
     photoUrl: null as string | null,
   },
@@ -408,6 +413,10 @@ const Index = () => {
                         <div className="flex justify-between items-center">
                           <span className="text-muted-foreground">Rating 2.0</span>
                           <span className="font-bold text-neon-magenta">{member.rating}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">ELO</span>
+                          <span className="font-bold text-yellow-400">{member.elo.toLocaleString('ru-RU')}</span>
                         </div>
                       </div>
                     </Card>

@@ -62,7 +62,7 @@ const teamMembers = [
     rating: 1.25,
     elo: 2107,
     photo: '⚡',
-    photoUrl: null as string | null,
+    photoUrl: 'https://cdn.poehali.dev/files/0ba30526-864f-4079-bdd8-c08c32eee9ca.jpeg',
   },
   {
     id: 3,
@@ -73,7 +73,7 @@ const teamMembers = [
     rating: 1.18,
     elo: 1060,
     photo: '🧠',
-    photoUrl: null as string | null,
+    photoUrl: 'https://cdn.poehali.dev/files/5aac0fec-9b6c-4a7d-8487-7d53ae7e308e.png',
   },
   {
     id: 4,
@@ -84,7 +84,7 @@ const teamMembers = [
     rating: 1.22,
     elo: 1488,
     photo: '🔥',
-    photoUrl: null as string | null,
+    photoUrl: 'https://cdn.poehali.dev/files/21a69c2c-7a1a-4890-8a3e-69fc031159c5.jpg',
   },
   {
     id: 5,
@@ -95,7 +95,7 @@ const teamMembers = [
     rating: 1.15,
     elo: 1001,
     photo: '🛡️',
-    photoUrl: null as string | null,
+    photoUrl: 'https://cdn.poehali.dev/files/efc3c1ce-d00d-49a3-98b8-d3f24b392c91.jpg',
   },
 ];
 

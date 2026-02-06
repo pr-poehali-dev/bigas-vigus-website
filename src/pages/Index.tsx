@@ -5,6 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { RoleBasedAccess } from '@/components/RoleBasedAccess';
 import {
   LineChart,
   Line,
@@ -140,6 +142,7 @@ interface VKPost {
 
 const Index = () => {
   const { toast } = useToast();
+  const { user, isAuthenticated, logout } = useAuth();
   const [activeSection, setActiveSection] = useState('home');
   const [team, setTeam] = useState(teamMembers);
   const [uploadingId, setUploadingId] = useState<number | null>(null);
@@ -219,13 +222,45 @@ const Index = () => {
               ))}
             </div>
 
-            <Button 
-              className="bg-neon-magenta hover:bg-neon-magenta/80 animate-glow"
-              onClick={() => window.location.href = '/login'}
-            >
-              <Icon name="LogIn" className="mr-2" size={18} />
-              Войти
-            </Button>
+            {isAuthenticated && user ? (
+              <div className="flex items-center gap-3">
+                <div className="hidden md:block text-right">
+                  <div className="text-sm font-semibold">{user.username}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {user.role === 'admin' && '👑 Администратор'}
+                    {user.role === 'player' && '🎮 Игрок'}
+                    {user.role === 'smm' && '📱 SMM-менеджер'}
+                    {user.role === 'user' && '👤 Пользователь'}
+                  </div>
+                </div>
+                <RoleBasedAccess permission="full_access">
+                  <Button 
+                    variant="default"
+                    className="bg-neon-magenta hover:bg-neon-magenta/80"
+                    onClick={() => window.location.href = '/admin'}
+                  >
+                    <Icon name="Shield" className="mr-2" size={18} />
+                    Админ-панель
+                  </Button>
+                </RoleBasedAccess>
+                <Button 
+                  variant="outline"
+                  className="neon-border"
+                  onClick={logout}
+                >
+                  <Icon name="LogOut" className="mr-2" size={18} />
+                  Выйти
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                className="bg-neon-magenta hover:bg-neon-magenta/80 animate-glow"
+                onClick={() => window.location.href = '/login'}
+              >
+                <Icon name="LogIn" className="mr-2" size={18} />
+                Войти
+              </Button>
+            )}
           </div>
         </div>
       </nav>
@@ -261,6 +296,23 @@ const Index = () => {
                 </div>
               </div>
             </section>
+
+            {isAuthenticated && user && (
+              <section className="relative py-6 px-8 rounded-xl overflow-hidden border-2 border-neon-cyan/40 bg-gradient-to-r from-neon-cyan/10 to-neon-purple/10">
+                <div className="flex items-start gap-4">
+                  <Icon name="Info" className="text-neon-cyan mt-1" size={24} />
+                  <div className="flex-1">
+                    <h3 className="font-bold text-lg mb-2">Вы вошли как: {user.username}</h3>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {user.role === 'admin' && '👑 Администратор — полный доступ ко всем функциям сайта'}
+                      {user.role === 'player' && '🎮 Игрок — вы можете редактировать свой профиль, загружать медиа и управлять статистикой'}
+                      {user.role === 'smm' && '📱 SMM-менеджер — вы можете управлять новостями и загружать медиа-контент'}
+                      {user.role === 'user' && '👤 Пользователь — вы можете просматривать весь контент сайта'}
+                    </p>
+                  </div>
+                </div>
+              </section>
+            )}
 
             <section className="grid md:grid-cols-4 gap-6">
               {[
@@ -365,17 +417,37 @@ const Index = () => {
                     <Card key={member.id} className="p-6 bg-card neon-border hover:scale-105 transition-transform">
                       <div className="text-center mb-4">
                         <div className="relative mx-auto w-32 h-32 mb-4 group">
-                          <input
-                            type="file"
-                            accept="image/png"
-                            id={`upload-${member.id}`}
-                            className="hidden"
-                            onChange={handlePhotoUpload}
-                          />
-                          <label
-                            htmlFor={`upload-${member.id}`}
-                            className="block w-full h-full cursor-pointer rounded-lg overflow-hidden bg-gradient-to-br from-neon-purple/20 to-neon-magenta/20 border-2 border-neon-cyan/30 hover:border-neon-cyan transition-all"
+                          <RoleBasedAccess permission="upload_media">
+                            <input
+                              type="file"
+                              accept="image/png"
+                              id={`upload-${member.id}`}
+                              className="hidden"
+                              onChange={handlePhotoUpload}
+                            />
+                          </RoleBasedAccess>
+                          <RoleBasedAccess 
+                            permission="upload_media"
+                            fallback={
+                              <div className="block w-full h-full rounded-lg overflow-hidden bg-gradient-to-br from-neon-purple/20 to-neon-magenta/20 border-2 border-neon-cyan/30">
+                                {member.photoUrl ? (
+                                  <img
+                                    src={member.photoUrl}
+                                    alt={member.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">
+                                    <div className="text-5xl">{member.photo}</div>
+                                  </div>
+                                )}
+                              </div>
+                            }
                           >
+                            <label
+                              htmlFor={`upload-${member.id}`}
+                              className="block w-full h-full cursor-pointer rounded-lg overflow-hidden bg-gradient-to-br from-neon-purple/20 to-neon-magenta/20 border-2 border-neon-cyan/30 hover:border-neon-cyan transition-all"
+                            >
                             {member.photoUrl ? (
                               <img
                                 src={member.photoUrl}
@@ -389,6 +461,7 @@ const Index = () => {
                               </div>
                             )}
                           </label>
+                          </RoleBasedAccess>
                           {uploadingId === member.id && (
                             <div className="absolute inset-0 bg-background/80 flex items-center justify-center rounded-lg">
                               <Icon name="Loader2" size={32} className="animate-spin text-neon-cyan" />

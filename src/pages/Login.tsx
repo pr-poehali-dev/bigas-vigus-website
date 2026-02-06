@@ -6,10 +6,12 @@ import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,47 +27,18 @@ const Login = () => {
       return;
     }
 
-    try {
-      const response = await fetch('https://functions.poehali.dev/083e3d05-b278-49cb-b29d-98e3e203352a', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: 'login',
-          username: username,
-          password: password,
-        }),
-      });
+    const success = await login(username, password);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        toast({
-          title: 'Ошибка входа',
-          description: data.error || 'Неверное имя пользователя или пароль',
-          variant: 'destructive',
-        });
-        return;
-      }
-
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('userName', data.user.username);
-      localStorage.setItem('userRole', data.user.role);
-      localStorage.setItem('userEmail', data.user.email);
-      localStorage.setItem('userAvatar', data.user.avatar_emoji);
-      localStorage.setItem('userId', data.user.id);
-
+    if (success) {
       toast({
         title: 'Успешный вход',
-        description: `Добро пожаловать, ${data.user.username}!`,
+        description: `Добро пожаловать, ${username}!`,
       });
-
       navigate('/dashboard');
-    } catch (error) {
+    } else {
       toast({
-        title: 'Ошибка',
-        description: 'Проблема с подключением к серверу',
+        title: 'Ошибка входа',
+        description: 'Неверное имя пользователя или пароль',
         variant: 'destructive',
       });
     }
@@ -154,21 +127,52 @@ const Login = () => {
           </form>
         </Card>
 
-        <div className="mt-6 grid grid-cols-3 gap-4">
-          {[
-            { icon: 'Shield', label: 'Безопасно' },
-            { icon: 'Zap', label: 'Быстро' },
-            { icon: 'Lock', label: 'Надежно' },
-          ].map((feature, idx) => (
-            <div key={idx} className="text-center">
-              <Icon
-                name={feature.icon}
-                className="mx-auto mb-2 text-neon-cyan"
-                size={24}
-              />
-              <div className="text-xs text-muted-foreground">{feature.label}</div>
+        <div className="mt-6 space-y-4">
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { icon: 'Shield', label: 'Безопасно' },
+              { icon: 'Zap', label: 'Быстро' },
+              { icon: 'Lock', label: 'Надежно' },
+            ].map((feature, idx) => (
+              <div key={idx} className="text-center">
+                <Icon
+                  name={feature.icon}
+                  className="mx-auto mb-2 text-neon-cyan"
+                  size={24}
+                />
+                <div className="text-xs text-muted-foreground">{feature.label}</div>
+              </div>
+            ))}
+          </div>
+
+          <Card className="p-4 bg-card/80 backdrop-blur-sm border-primary/20">
+            <div className="text-xs text-muted-foreground space-y-2">
+              <p className="font-semibold text-center mb-3">Демо-доступы для тестирования:</p>
+              <div className="grid grid-cols-2 gap-2 text-[10px]">
+                <div className="bg-background/50 p-2 rounded">
+                  <p className="font-bold text-neon-magenta">Админ</p>
+                  <p>Логин: admin</p>
+                  <p className="text-[9px] opacity-70">Полный доступ</p>
+                </div>
+                <div className="bg-background/50 p-2 rounded">
+                  <p className="font-bold text-neon-cyan">Игрок</p>
+                  <p>Логин: N11ck_</p>
+                  <p className="text-[9px] opacity-70">Редактирование профиля</p>
+                </div>
+                <div className="bg-background/50 p-2 rounded">
+                  <p className="font-bold text-neon-purple">SMM</p>
+                  <p>Логин: smm_manager</p>
+                  <p className="text-[9px] opacity-70">Управление новостями</p>
+                </div>
+                <div className="bg-background/50 p-2 rounded">
+                  <p className="font-bold">Пользователь</p>
+                  <p>Логин: viewer</p>
+                  <p className="text-[9px] opacity-70">Только просмотр</p>
+                </div>
+              </div>
+              <p className="text-center text-[9px] mt-2 opacity-60">Пароль любой для демо</p>
             </div>
-          ))}
+          </Card>
         </div>
       </div>
     </div>

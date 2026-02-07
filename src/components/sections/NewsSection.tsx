@@ -64,7 +64,7 @@ export const NewsSection = () => {
               </div>
               <div>
                 <h3 className="font-montserrat font-bold text-xl">BIGAS VIRUS</h3>
-                <p className="text-sm text-muted-foreground">Официальное сообщество</p>
+                <p className="text-sm text-muted-foreground">Открытое сообщество</p>
               </div>
             </div>
             

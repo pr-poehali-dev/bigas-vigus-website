@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { useAuth } from '@/contexts/AuthContext';
 import { RoleBasedAccess } from '@/components/RoleBasedAccess';
+import { trackEvent } from '@/components/YandexMetrika';
 
 interface HeaderProps {
   activeSection: string;
@@ -41,7 +42,10 @@ export const Header = ({ activeSection, setActiveSection }: HeaderProps) => {
                 className={`font-montserrat ${
                   activeSection === item.id ? 'animate-glow' : ''
                 }`}
-                onClick={() => setActiveSection(item.id)}
+                onClick={() => {
+                  trackEvent('section_view', { section: item.id });
+                  setActiveSection(item.id);
+                }}
               >
                 <Icon name={item.icon} className="mr-2" size={18} />
                 {item.label}

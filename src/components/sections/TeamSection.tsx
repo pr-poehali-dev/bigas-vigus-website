@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { RoleBasedAccess } from '@/components/RoleBasedAccess';
+import { trackEvent } from '@/components/YandexMetrika';
 
 const teamMembers = [
   {
@@ -96,6 +97,7 @@ export const TeamSection = () => {
                   )
                 );
                 setUploadingId(null);
+                trackEvent('photo_upload', { player: member.name });
               };
               reader.readAsDataURL(file);
             };

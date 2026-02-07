@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import { trackEvent } from '@/components/YandexMetrika';
 
 export const NewsSection = () => {
   const widgetRef = useRef<HTMLDivElement>(null);
@@ -43,7 +44,10 @@ export const NewsSection = () => {
           <Button 
             size="lg"
             className="bg-[#0077FF] hover:bg-[#0066DD] text-white"
-            onClick={() => window.open('https://vk.com/bigasvirus', '_blank')}
+            onClick={() => {
+              trackEvent('vk_group_open', { location: 'news_section' });
+              window.open('https://vk.com/bigasvirus', '_blank');
+            }}
           >
             <Icon name="ExternalLink" className="mr-2" />
             Открыть группу VK
@@ -97,7 +101,10 @@ export const NewsSection = () => {
             <Button 
               className="w-full bg-gradient-to-r from-neon-purple to-neon-magenta hover:opacity-90"
               size="lg"
-              onClick={() => window.open('https://vk.com/bigasvirus', '_blank')}
+              onClick={() => {
+                trackEvent('vk_subscribe_click', { location: 'news_section_card' });
+                window.open('https://vk.com/bigasvirus', '_blank');
+              }}
             >
               <Icon name="UserPlus" className="mr-2" />
               Подписаться на группу

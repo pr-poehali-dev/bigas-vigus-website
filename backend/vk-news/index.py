@@ -6,7 +6,7 @@ from datetime import datetime
 
 def handler(event: dict, context) -> dict:
     """
-    Получение новостей из группы VK
+    Получение новостей из группы VK (публичный доступ без токена)
     """
     method = event.get('httpMethod', 'GET')
 
@@ -31,24 +31,12 @@ def handler(event: dict, context) -> dict:
             'body': json.dumps({'error': 'Method not allowed'})
         }
 
-    access_token = os.environ.get('VK_ACCESS_TOKEN')
-    if not access_token:
-        return {
-            'statusCode': 500,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            'body': json.dumps({'error': 'VK_ACCESS_TOKEN not configured'})
-        }
-
     count = event.get('queryStringParameters', {}).get('count', '10')
     
     try:
         params = {
             'domain': 'bigasvirus',
             'count': count,
-            'access_token': access_token,
             'v': '5.131'
         }
         
@@ -58,13 +46,19 @@ def handler(event: dict, context) -> dict:
             data = json.loads(response.read().decode('utf-8'))
         
         if 'error' in data:
+            error_msg = data['error'].get('error_msg', 'Unknown error')
+            error_code = data['error'].get('error_code', 0)
+            print(f"VK API Error: {error_code} - {error_msg}")
             return {
                 'statusCode': 400,
                 'headers': {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*'
                 },
-                'body': json.dumps({'error': data['error']['error_msg']})
+                'body': json.dumps({
+                    'error': f'VK API Error: {error_msg}',
+                    'error_code': error_code
+                })
             }
         
         posts = []

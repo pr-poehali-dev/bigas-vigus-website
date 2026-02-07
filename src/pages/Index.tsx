@@ -46,14 +46,14 @@ const radarData = [
 const teamMembers = [
   {
     id: 1,
-    name: 'N11ck_',
+    name: 'Bucus 2.0',
     role: 'AWPer',
     kd: 1.1,
     adr: 90,
     rating: 1.28,
     elo: 1488,
     photo: '🎯',
-    photoUrl: 'https://cdn.poehali.dev/files/11c01ba0-db04-4751-afa7-e8b39cf6cf2d.jpg',
+    photoUrl: 'https://cdn.poehali.dev/files/adcf6898-e7cd-4839-82f4-5f57c42766e7.png',
   },
   {
     id: 2,

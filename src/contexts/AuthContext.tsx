@@ -39,7 +39,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Демо-пользователи для тестирования
 const demoUsers: User[] = [
   { id: '1', username: 'admin', role: 'admin', email: 'admin@bigasvirus.com' },
-  { id: '2', username: 'N11ck_', role: 'player', email: 'n11ck@bigasvirus.com' },
+  { id: '2', username: 'Bucus 2.0', role: 'player', email: 'bucus@bigasvirus.com' },
   { id: '3', username: 'smm_manager', role: 'smm', email: 'smm@bigasvirus.com' },
   { id: '4', username: 'viewer', role: 'user', email: 'user@example.com' },
 ];

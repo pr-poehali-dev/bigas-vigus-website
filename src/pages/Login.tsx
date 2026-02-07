@@ -156,7 +156,7 @@ const Login = () => {
                 </div>
                 <div className="bg-background/50 p-2 rounded">
                   <p className="font-bold text-neon-cyan">Игрок</p>
-                  <p>Логин: N11ck_</p>
+                  <p>Логин: Bucus 2.0</p>
                   <p className="text-[9px] opacity-70">Редактирование профиля</p>
                 </div>
                 <div className="bg-background/50 p-2 rounded">
